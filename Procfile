@@ -1,1 +1,1 @@
-worker: python 
+worker: python perudo_bot.py
