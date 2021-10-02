@@ -3,7 +3,7 @@ import discord
 import random
 import os
 from itertools import cycle
-# Bot methods
+# Bot methods 
 # --------------------------------------------------------------
 
 
@@ -51,7 +51,7 @@ client.bid_face = 0
 client.turn = ""
 client.previous = ""
 aux_list = []
-# -----------------------------------------------------------------
+# -------------------------------------------------------------------
 
 
 @ client.event
