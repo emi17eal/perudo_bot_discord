@@ -430,4 +430,4 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
 
     # Bot token
-client.run(os.environ('bot_token'))
+client.run(os.environ['bot_token'])
