@@ -1,6 +1,7 @@
 # This is the code for a bot that allows the game liars dice to be played on a discord server
 import discord
 import random
+import os
 from itertools import cycle
 # Bot methods
 # --------------------------------------------------------------
@@ -429,4 +430,4 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
 
     # Bot token
-client.run('ODkyNDU2NTM2MDQxOTg4MTY4.YVNK6w.FUxFMW9YVcIdwaI0cWxFyqSpUEM')
+client.run(os.environ('bot_token'))
