@@ -105,7 +105,7 @@ async def on_message(message):
     # join command when there is a lobby avaiable
     if message.content.startswith('!join') and client.loby_started and message.author not in client.table["players"]:
         client.table["players"].append(message.author)
-        client.table["quantity"].append(5)
+        client.table["quantity"].append(1)
         client.table["dice"].append([])
         await message.channel.send('Welcome to the lobby {0}! The game will start shortly'.format(message.author.name))
     # --------------------------------------------------------------------------------------------------------------
@@ -188,6 +188,7 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
 
     # !xdy and !liar command respondes
+    
     # --------------------------------------------------------------------------------------------------------------
 
     # xdy commands when game is on and player is in turn
@@ -347,14 +348,17 @@ async def on_message(message):
             client.bid_quantity = 0
             client.bid_face = 0
             for i, x in enumerate(client.table["players"]):
-                if x.name == client.turn.name:
+                if x.name == client.previous.name:
                     client.table["quantity"][i] -= 1
-                    # while next(client.player_cycle) != client.turn:
-                    #     next(client.player_cycle)
+                    client.turn = client.previous
+                    while next(client.player_cycle) != client.turn:
+                        next(client.player_cycle)
                     client.previous = ''
                     if client.table["quantity"][i] == 0:
                         client.previous = next(client.player_cycle)
                     break
+
+
          # We check if any player has lost the game
         for i, x in enumerate(client.table["quantity"]):
             if x == 0:
