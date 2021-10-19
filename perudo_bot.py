@@ -410,9 +410,9 @@ async def on_message(message):
     #!kick <name> command 
 
     if message.content.startswith('!kick') and client.loby_started and message.author in client.table["players"]:
-        if message.content < len(7):
+        if len(message.content) < 7:
             await message.channel.send('You have not specified who you want to kick, please type !kick <name>')
-        elif message.content >= len(7):
+        elif len(message.content) >= 7:
             for i, x in enumerate(client.table["quantity"]):
                 print(client.table["players"][i].name)
                 print('message.content: ', message.content[7:-1])
