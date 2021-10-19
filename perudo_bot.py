@@ -35,6 +35,7 @@ help_string = """
 !liar  - Accuse previous player of being a liar
 !bid   - See current bid
 !exact - Call exact bid to gain 1 dice if correct
+!kick  - Kick a player from the game using !kick <name#xxxx> 
 
 Want to learn how to play?
 """
@@ -105,7 +106,7 @@ async def on_message(message):
     # join command when there is a lobby avaiable
     if message.content.startswith('!join') and client.loby_started and message.author not in client.table["players"]:
         client.table["players"].append(message.author)
-        client.table["quantity"].append(1)
+        client.table["quantity"].append(5)
         client.table["dice"].append([])
         await message.channel.send('Welcome to the lobby {0}! The game will start shortly'.format(message.author.name))
     # --------------------------------------------------------------------------------------------------------------
@@ -409,23 +410,58 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
     #!kick <name> command 
 
-    if message.content.startswith('!kick') and client.loby_started and message.author in client.table["players"]:
-        if len(message.content) < 7:
-            await message.channel.send('You have not specified who you want to kick, please type !kick <name>')
-        elif len(message.content) >= 7:
-            for i, x in enumerate(client.table["quantity"]):
-                print(client.table["players"][i].name)
-                print('message.content: ', message.content[7:-1])
-                if client.table["players"][i].name == message.content[7:-1]:
+    if message.content.startswith('!kick') and client.game_started and message.author in client.table["players"]:
+        args = message.content.split(' ')
+        print(args)
+        if len(args) <= 1:
+            await message.channel.send('You have not specified who you want to kick, please type !kick <name#xxxx>')
+        elif len(args) == 2:
+            for i, x in enumerate(client.table["players"]):
+                print(i)
+                print(x)
+                if args[1] == str(x):
                     await message.channel.send('\n\n`{0} has been kicked from the game!\n\n`'.format(client.table["players"][i].name))
                     del client.table["players"][i]
                     del client.table["quantity"][i]
                     del client.table["dice"][i]
                     client.player_cycle = cycle(client.table["players"])
-                elif client.table["players"][i].name != message.content[7:-1]:
-                    await message.channel.send('The player you have requested to kick is not in the game, please reconsider spelling')
-                break
+                    # We check if the game has ended
+                    if len(client.table["players"]) == 1:
+                        await message.channel.send('\n\n`{0} has won the game! The match is over`'.format(client.table["players"][0].name))
+                        client.game_started = False
+                        client.loby_started = False
+                        client.table = {
+                            "players": [],
+                            "quantity": [],
+                            "dice": []
+                        }
+                        client.bid_quantity = 0
+                        client.bid_face = 0
+                    else:
+                        await message.channel.send('\n\n`New round starting! Here are your dice (Check your DMs)`')
 
+                        for x in client.table["dice"]:
+                            del x[:]
+
+                        # We send each player their dice values
+                        for i, x in enumerate(client.table["players"]):
+                            for y in range(client.table["quantity"][i]):
+                                dice_value = random.randint(1, 6)
+                                client.table["dice"][i].append(dice_value)
+                                await x.send(file=discord.File(draw_dice(dice_value)))
+                            await x.send("Dice values: {0}".format(client.table["dice"][i]))
+
+                        # Dice values have been sent, we print out table status
+                        await message.channel.send("`Dice have been rolled, here is the table status\n`")
+                        for i, x in enumerate(client.table["players"]):
+                            del aux_list[:]
+                            await message.channel.send("{0} dice:".format(x.name))
+                            for y in range(client.table["quantity"][i]):
+                                aux_list.append('?')
+                            await message.channel.send("{0}".format(aux_list) + " Total: " + str(len(aux_list)) + " dice")
+                        del aux_list[:]
+                        await message.channel.send("`{0} is the player in turn, make your move`".format(client.turn.name))        
+                        
     #!list command responses
     # --------------------------------------------------------------------------------------------------------------
     if message.content.startswith('!list') and client.game_started:
@@ -455,4 +491,4 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
 
     # Bot token
-client.run(os.environ['bot_token'])
+client.run('ODkyNDU2NTM2MDQxOTg4MTY4.YVNK6w.FUxFMW9YVcIdwaI0cWxFyqSpUEM')
