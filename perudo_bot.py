@@ -259,11 +259,11 @@ async def on_message(message):
                 if x.name == client.previous.name:
                     client.table["quantity"][i] -= 1
                     client.turn = client.previous
-                    while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
-                    client.previous = ''
                     if client.table["quantity"][i] == 0:
-                        client.previous = next(client.player_cycle)
+                        client.turn = next(client.player_cycle)
+                    client.previous = ''
+                    # while next(client.player_cycle) != client.turn:
+                    #     next(client.player_cycle)
                     break
 
         # We check if any player has lost the game
@@ -273,9 +273,10 @@ async def on_message(message):
                 del client.table["players"][i]
                 del client.table["quantity"][i]
                 del client.table["dice"][i]
-                while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
-
+                client.player_cycle = cycle(client.table["players"])
+                # while next(client.player_cycle) != client.turn:
+                #         next(client.player_cycle)
+                
         # We check if the game has ended
         if len(client.table["players"]) == 1:
             await message.channel.send('\n\n`{0} has won the game! The match is over`'.format(client.table["players"][0].name))
@@ -340,8 +341,9 @@ async def on_message(message):
             for i, x in enumerate(client.table["players"]):
                 if x.name == client.turn.name:
                     client.table["quantity"][i] += 1
-                    if client.table["quantity"][i] == 0:
-                        client.turn = next(client.player_cycle)
+                    client.turn = next(client.player_cycle)
+                    # if client.table["quantity"][i] == 0:
+                    #     client.turn = next(client.player_cycle)
                     break
         else:
             await message.channel.send("`The exact bid was incorrect! %s loses a dice`" % (client.turn.name))
@@ -351,11 +353,11 @@ async def on_message(message):
                 if x.name == client.previous.name:
                     client.table["quantity"][i] -= 1
                     client.turn = client.previous
+                    if client.table["quantity"][i] == 0:
+                        client.turn = next(client.player_cycle)
                     while next(client.player_cycle) != client.turn:
                         next(client.player_cycle)
                     client.previous = ''
-                    if client.table["quantity"][i] == 0:
-                        client.previous = next(client.player_cycle)
                     break
 
 
@@ -366,8 +368,9 @@ async def on_message(message):
                 del client.table["players"][i]
                 del client.table["quantity"][i]
                 del client.table["dice"][i]
-                while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
+                client.player_cycle = cycle(client.table["players"])
+                # while next(client.player_cycle) != client.turn:
+                #         next(client.player_cycle)
 
         # We check if the game has ended
         if len(client.table["players"]) == 1:
