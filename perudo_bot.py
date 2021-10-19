@@ -406,6 +406,26 @@ async def on_message(message):
                 await message.channel.send("{0}".format(aux_list) + " Total: " + str(len(aux_list)) + " dice")
             del aux_list[:]
             await message.channel.send("`{0} is the player in turn, make your move`".format(client.turn.name))                  
+    # --------------------------------------------------------------------------------------------------------------
+    #!kick <name> command 
+
+    if message.content.startswith('!kick') and client.loby_started and message.author in client.table["players"]:
+        if message.content < len(7):
+            await message.channel.send('You have not specified who you want to kick, please type !kick <name>')
+        elif message.content >= len(7):
+            for i, x in enumerate(client.table["quantity"]):
+                print(client.table["players"][i].name)
+                print('message.content: ', message.content[7:-1])
+                if client.table["players"][i].name == message.content[7:-1]:
+                    await message.channel.send('\n\n`{0} has been kicked from the game!\n\n`'.format(client.table["players"][i].name))
+                    del client.table["players"][i]
+                    del client.table["quantity"][i]
+                    del client.table["dice"][i]
+                    client.player_cycle = cycle(client.table["players"])
+                elif client.table["players"][i].name != message.content[7:-1]:
+                    await message.channel.send('The player you have requested to kick is not in the game, please reconsider spelling')
+                break
+
     #!list command responses
     # --------------------------------------------------------------------------------------------------------------
     if message.content.startswith('!list') and client.game_started:
