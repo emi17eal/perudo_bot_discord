@@ -344,11 +344,8 @@ async def on_message(message):
                 if x.name == client.turn.name:
                     if client.table['quantity'][i] < 5:
                         client.table["quantity"][i] += 1
-                    client.turn = next(client.player_cycle)
-                    while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
-                    # if client.table["quantity"][i] == 0:
-                    #     client.turn = next(client.player_cycle)
+                    if client.table["quantity"][i] == 0:
+                        client.turn = next(client.player_cycle)
                     break
         else:
             await message.channel.send("`The exact bid was incorrect! %s loses a dice`" % (client.turn.name))
@@ -357,9 +354,11 @@ async def on_message(message):
             for i, x in enumerate(client.table["players"]):
                 if x.name == client.turn.name:
                     client.table["quantity"][i] -= 1
-                    client.turn = next(client.player_cycle)
-                    while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
+                    # while next(client.player_cycle) != client.turn:
+                    #     next(client.player_cycle)
+                    client.previous = ''
+                    if client.table["quantity"][i] == 0:
+                        client.previous = next(client.player_cycle)
                     break
 
 
