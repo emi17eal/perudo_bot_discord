@@ -251,6 +251,8 @@ async def on_message(message):
                     client.table["quantity"][i] -= 1
                     if client.table["quantity"][i] == 0:
                         client.turn = next(client.player_cycle)
+                    while next(client.player_cycle) != client.turn:
+                        next(client.player_cycle)
                     break
         else:
             await message.channel.send("`The bid was NOT correct! %s is a liar and loses a dice`" % (client.previous.name))
@@ -263,8 +265,8 @@ async def on_message(message):
                     if client.table["quantity"][i] == 0:
                         client.turn = next(client.player_cycle)
                     client.previous = ''
-                    # while next(client.player_cycle) != client.turn:
-                    #     next(client.player_cycle)
+                    while next(client.player_cycle) != client.turn:
+                        next(client.player_cycle)
                     break
 
         # We check if any player has lost the game
@@ -343,6 +345,8 @@ async def on_message(message):
                 if x.name == client.turn.name:
                     client.table["quantity"][i] += 1
                     client.turn = next(client.player_cycle)
+                    while next(client.player_cycle) != client.turn:
+                        next(client.player_cycle)
                     # if client.table["quantity"][i] == 0:
                     #     client.turn = next(client.player_cycle)
                     break
