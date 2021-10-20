@@ -264,7 +264,6 @@ async def on_message(message):
                     client.turn = client.previous
                     if client.table["quantity"][i] == 0:
                         client.turn = next(client.player_cycle)
-                    client.previous = ''
                     while next(client.player_cycle) != client.turn:
                         next(client.player_cycle)
                     break
@@ -343,7 +342,8 @@ async def on_message(message):
             client.bid_face = 0
             for i, x in enumerate(client.table["players"]):
                 if x.name == client.turn.name:
-                    client.table["quantity"][i] += 1
+                    if client.table['quantity'][i] < 5:
+                        client.table["quantity"][i] += 1
                     client.turn = next(client.player_cycle)
                     while next(client.player_cycle) != client.turn:
                         next(client.player_cycle)
@@ -360,7 +360,6 @@ async def on_message(message):
                     client.turn = next(client.player_cycle)
                     while next(client.player_cycle) != client.turn:
                         next(client.player_cycle)
-                    client.previous = ''
                     break
 
 
