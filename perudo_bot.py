@@ -251,8 +251,6 @@ async def on_message(message):
                     client.table["quantity"][i] -= 1
                     if client.table["quantity"][i] == 0:
                         client.turn = next(client.player_cycle)
-                    while next(client.player_cycle) != client.turn:
-                        next(client.player_cycle)
                     break
         else:
             await message.channel.send("`The bid was NOT correct! %s is a liar and loses a dice`" % (client.previous.name))
