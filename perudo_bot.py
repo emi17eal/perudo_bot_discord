@@ -106,7 +106,7 @@ async def on_message(message):
     # join command when there is a lobby avaiable
     if message.content.startswith('!join') and client.loby_started and message.author not in client.table["players"]:
         client.table["players"].append(message.author)
-        client.table["quantity"].append(1)
+        client.table["quantity"].append(5)
         client.table["dice"].append([])
         await message.channel.send('Welcome to the lobby {0}! The game will start shortly'.format(message.author.name))
     # --------------------------------------------------------------------------------------------------------------
@@ -491,4 +491,4 @@ async def on_message(message):
     # --------------------------------------------------------------------------------------------------------------
 
     # Bot token
-client.run('ODkyNDU2NTM2MDQxOTg4MTY4.YVNK6w.FUxFMW9YVcIdwaI0cWxFyqSpUEM')
+client.run(os.environ['bot_token'])
