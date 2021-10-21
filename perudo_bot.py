@@ -356,7 +356,7 @@ async def on_message(message):
                     #     next(client.player_cycle)
                     client.previous = ''
                     if client.table["quantity"][i] == 0:
-                        client.previous = next(client.player_cycle)
+                        client.turn = next(client.player_cycle)
                     break
 
 
