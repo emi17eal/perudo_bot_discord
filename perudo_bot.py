@@ -335,7 +335,7 @@ async def on_message(message):
        
         # We take a die away from the loser and check if the game is over
         if real_quantity == int(client.bid_quantity):
-            await message.channel.send("`The exact bid was correct! %s gains a dice`" % (client.turn.name))
+            await message.channel.send("`The exact bid was correct! %s gains a dice (max 5)`" % (client.turn.name))
             client.bid_quantity = 0
             client.bid_face = 0
             for i, x in enumerate(client.table["players"]):
