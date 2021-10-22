@@ -106,7 +106,7 @@ async def on_message(message):
     # join command when there is a lobby avaiable
     if message.content.startswith('!join') and client.loby_started and message.author not in client.table["players"]:
         client.table["players"].append(message.author)
-        client.table["quantity"].append(1)
+        client.table["quantity"].append(5)
         client.table["dice"].append([])
         await message.channel.send('Welcome to the lobby {0}! The game will start shortly'.format(message.author.name))
     # --------------------------------------------------------------------------------------------------------------
