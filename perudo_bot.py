@@ -264,8 +264,8 @@ async def on_message(message):
                         while next(client.player_cycle) != client.turn:
                             next(client.player_cycle)
                     else:
-                        client.previous = client.turn
-                        client.turn = next(next(client.player_cycle))
+                        client.previous = ''
+                        client.turn = next(client.player_cycle)
                     break
 
         # We check if any player has lost the game
