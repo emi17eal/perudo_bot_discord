@@ -345,6 +345,7 @@ async def on_message(message):
                     if client.table['quantity'][i] < 5:
                         client.table["quantity"][i] += 1
                     if client.table["quantity"][i] == 0:
+                        client.previous = ''
                         client.turn = next(client.player_cycle)
                     break
         else:
